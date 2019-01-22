@@ -44,3 +44,5 @@ instance Read Operator where
                     , o <- enumerate
                     , s == show o
                     ]
+
+-- ================================== PARSING =================================
