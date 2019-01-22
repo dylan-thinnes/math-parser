@@ -1,5 +1,7 @@
 module MathParse where
 
+import Control.Monad (liftM2)
+
 -- ======================== EXPRESSIONS MANIPULATION ==========================
 data Expr = Num Integer
           | Expr :**: Expr
@@ -12,6 +14,23 @@ data Expr = Num Integer
 data CalcError = TooLarge
                | NegativePower
     deriving (Show, Eq)
+
+calculate :: Expr -> Either CalcError Integer
+calculate (Num i)   = Right i
+calculate (a :**: b) = do
+    a' <- calculate a
+    b' <- calculate b
+    if or [ b' > 1000000
+          , a' > 100 && b' > 100000
+          ] 
+    then Left TooLarge
+    else if b' < 0 
+    then Left NegativePower
+    else liftM2 (^) (calculate a) (calculate b)
+calculate (a :*: b) = liftM2 (*) (calculate a) (calculate b)
+calculate (a :/: b) = liftM2 div (calculate a) (calculate b)
+calculate (a :+: b) = liftM2 (+) (calculate a) (calculate b)
+calculate (a :-: b) = liftM2 (-) (calculate a) (calculate b)
 
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Subtract
