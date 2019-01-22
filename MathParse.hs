@@ -51,6 +51,15 @@ instance Read Operator where
 
 -- ================================== PARSING =================================
 
+-- | Specialized reading utilities
+-- Only read in positive integers
+readsInt :: ReadS Integer
+readsInt = filter ((>=0) . fst) . reads
+
+-- Read in operations
+readsOp :: ReadS Operator
+readsOp = reads
+
 data ParseError = UnusedOperators   [Operator]
                 | UnusedOperands    [Expr]
                 | NotEnoughOperators
