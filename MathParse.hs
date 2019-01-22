@@ -6,7 +6,7 @@ import Data.Bits
 
 -- ======================== TYING IT ALL TOGETHER =============================
 
-data Error = C CalcError
+data Error = C ReduceError
            | P ParseError
     deriving (Show, Eq)
 
@@ -33,12 +33,12 @@ data Expr = Num Integer
           | Expr :=: Expr
     deriving (Eq, Show, Read)
 
-data CalcError = TooLarge
-               | NegativePower
+data ReduceError = TooLarge
+                 | NegativePower
     deriving (Show, Eq)
 
--- Reduces an Expression into a final integer, or exits with a CalcError
-reduce :: Expr -> Either CalcError Integer
+-- Reduces an Expression into a final integer, or exits with a ReduceError
+reduce :: Expr -> Either ReduceError Integer
 reduce (Num i)   = Right i
 reduce (a :**: b) = do
     a' <- reduce a
