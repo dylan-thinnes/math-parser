@@ -10,8 +10,8 @@ data Error = C CalcError
            | P ParseError
     deriving (Show, Eq)
 
-fullCalculation :: String -> Either Error Integer
-fullCalculation s = do
+calculate :: String -> Either Error Integer
+calculate s = do
     e <- left P $ parseToExpr s
     i <- left C $ reduce e
     return i
