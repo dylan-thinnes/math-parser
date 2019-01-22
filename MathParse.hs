@@ -1,6 +1,19 @@
 module MathParse where
 
 import Control.Monad (liftM2, foldM)
+import Control.Arrow (left)
+
+-- ======================== TYING IT ALL TOGETHER =============================
+
+data Error = C CalcError
+           | P ParseError
+    deriving (Show, Eq)
+
+fullCalculation :: String -> Either Error Integer
+fullCalculation s = do
+    e <- left P $ parseToExpr s
+    i <- left C $ calculate e
+    return i
 
 -- ======================== EXPRESSIONS MANIPULATION ==========================
 data Expr = Num Integer
