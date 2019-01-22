@@ -2,6 +2,7 @@ module MathParse where
 
 import Control.Monad (liftM2, foldM)
 import Control.Arrow (left)
+import Data.Bits
 
 -- ======================== TYING IT ALL TOGETHER =============================
 
@@ -22,6 +23,10 @@ data Expr = Num Integer
           | Expr :/: Expr
           | Expr :+: Expr
           | Expr :-: Expr
+          | Expr :&: Expr
+          | Expr :^: Expr
+          | Expr :|: Expr
+          | Expr :=: Expr
     deriving (Eq, Show, Read)
 
 data CalcError = TooLarge
@@ -44,9 +49,17 @@ calculate (a :*: b) = liftM2 (*) (calculate a) (calculate b)
 calculate (a :/: b) = liftM2 div (calculate a) (calculate b)
 calculate (a :+: b) = liftM2 (+) (calculate a) (calculate b)
 calculate (a :-: b) = liftM2 (-) (calculate a) (calculate b)
+calculate (a :&: b) = liftM2 (.&.) (calculate a) (calculate b)
+calculate (a :^: b) = liftM2 xor (calculate a) (calculate b)
+calculate (a :|: b) = liftM2 (.|.) (calculate a) (calculate b)
+calculate (a :=: b) = liftM2 (\x y -> toInteger $ fromEnum $ x == y) (calculate a) (calculate b)
 
 -- ============================ OPERATOR MANIPULATION =========================
-data Operator = Subtract
+data Operator = Equals
+              | Or
+              | Xor
+              | And
+              | Subtract
               | Add
               | Divide
               | Times
@@ -73,6 +86,10 @@ instance Show Operator where
     show Divide       = "/"
     show Add          = "+"
     show Subtract     = "-"
+    show And          = "&"
+    show Xor          = "^"
+    show Or           = "|"
+    show Equals       = "="
 
 instance Read Operator where
     readsPrec _ s = [ (o,rest) 
@@ -185,4 +202,8 @@ applyBinaryOp (a:b:xs) op = Right $ case op of
                               Divide       -> (b :/: a):xs
                               Add          -> (b :+: a):xs
                               Subtract     -> (b :-: a):xs
+                              And          -> (b :&: a):xs
+                              Xor          -> (b :^: a):xs
+                              Or           -> (b :|: a):xs
+                              Equals       -> (b :=: a):xs
 applyBinaryOp _        op = Left $ NotEnoughOperands op
