@@ -1,5 +1,6 @@
 module MathParse where
 
+-- ======================== EXPRESSIONS MANIPULATION ==========================
 data Expr = Num Integer
           | Expr :**: Expr
           | Expr :*: Expr
@@ -8,6 +9,7 @@ data Expr = Num Integer
           | Expr :-: Expr
     deriving (Eq, Show, Read)
 
+-- ============================ OPERATOR MANIPULATION =========================
 data Operator = Subtract
               | Add
               | Divide
