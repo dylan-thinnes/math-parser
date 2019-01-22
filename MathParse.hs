@@ -10,6 +10,10 @@ data Error = C CalcError
            | P ParseError
     deriving (Show, Eq)
 
+-- Entry point for calculation
+-- Either 
+-- * exits with an error, or 
+-- * returns the integer from parsing the expression
 calculate :: String -> Either Error Integer
 calculate s = do
     e <- left P $ parseToExpr s
@@ -33,6 +37,7 @@ data CalcError = TooLarge
                | NegativePower
     deriving (Show, Eq)
 
+-- Reduces an Expression into a final integer, or exits with a CalcError
 reduce :: Expr -> Either CalcError Integer
 reduce (Num i)   = Right i
 reduce (a :**: b) = do
