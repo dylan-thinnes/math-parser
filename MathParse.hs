@@ -16,6 +16,9 @@ data Operator = Subtract
               | OpenParen | CloseParen
     deriving (Eq, Enum, Ord, Bounded)
 
+enumerate :: (Bounded a, Enum a) => [a]
+enumerate = [minBound .. maxBound]
+
 instance Show Operator where
     show CloseParen   = ")"
     show OpenParen    = "("
@@ -24,3 +27,11 @@ instance Show Operator where
     show Divide       = "/"
     show Add          = "+"
     show Subtract     = "-"
+
+instance Read Operator where
+    readsPrec _ s = [ (o,rest) 
+                    | (s,rest) <- lex s
+                    , o <- enumerate
+                    , s == show o
+                    ]
+
