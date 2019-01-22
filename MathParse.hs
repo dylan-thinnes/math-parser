@@ -13,7 +13,7 @@ data Error = C CalcError
 fullCalculation :: String -> Either Error Integer
 fullCalculation s = do
     e <- left P $ parseToExpr s
-    i <- left C $ calculate e
+    i <- left C $ reduce e
     return i
 
 -- ======================== EXPRESSIONS MANIPULATION ==========================
@@ -33,26 +33,26 @@ data CalcError = TooLarge
                | NegativePower
     deriving (Show, Eq)
 
-calculate :: Expr -> Either CalcError Integer
-calculate (Num i)   = Right i
-calculate (a :**: b) = do
-    a' <- calculate a
-    b' <- calculate b
+reduce :: Expr -> Either CalcError Integer
+reduce (Num i)   = Right i
+reduce (a :**: b) = do
+    a' <- reduce a
+    b' <- reduce b
     if or [ b' > 1000000
           , a' > 100 && b' > 100000
           ] 
     then Left TooLarge
     else if b' < 0 
     then Left NegativePower
-    else liftM2 (^) (calculate a) (calculate b)
-calculate (a :*: b) = liftM2 (*) (calculate a) (calculate b)
-calculate (a :/: b) = liftM2 div (calculate a) (calculate b)
-calculate (a :+: b) = liftM2 (+) (calculate a) (calculate b)
-calculate (a :-: b) = liftM2 (-) (calculate a) (calculate b)
-calculate (a :&: b) = liftM2 (.&.) (calculate a) (calculate b)
-calculate (a :^: b) = liftM2 xor (calculate a) (calculate b)
-calculate (a :|: b) = liftM2 (.|.) (calculate a) (calculate b)
-calculate (a :=: b) = liftM2 (\x y -> toInteger $ fromEnum $ x == y) (calculate a) (calculate b)
+    else liftM2 (^) (reduce a) (reduce b)
+reduce (a :*: b) = liftM2 (*) (reduce a) (reduce b)
+reduce (a :/: b) = liftM2 div (reduce a) (reduce b)
+reduce (a :+: b) = liftM2 (+) (reduce a) (reduce b)
+reduce (a :-: b) = liftM2 (-) (reduce a) (reduce b)
+reduce (a :&: b) = liftM2 (.&.) (reduce a) (reduce b)
+reduce (a :^: b) = liftM2 xor (reduce a) (reduce b)
+reduce (a :|: b) = liftM2 (.|.) (reduce a) (reduce b)
+reduce (a :=: b) = liftM2 (\x y -> toInteger $ fromEnum $ x == y) (reduce a) (reduce b)
 
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Equals
