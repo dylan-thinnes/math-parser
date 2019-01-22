@@ -15,3 +15,12 @@ data Operator = Subtract
               | Exponentiate
               | OpenParen | CloseParen
     deriving (Eq, Enum, Ord, Bounded)
+
+instance Show Operator where
+    show CloseParen   = ")"
+    show OpenParen    = "("
+    show Exponentiate = "**"
+    show Times        = "*"
+    show Divide       = "/"
+    show Add          = "+"
+    show Subtract     = "-"
