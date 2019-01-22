@@ -87,6 +87,9 @@ data ParseError = UnusedOperators   [Operator]
                 | UnidentifiedToken String
     deriving (Show, Eq)
 
+parseToExpr :: String -> Either ParseError Expr
+parseToExpr = shuntingYard True [] []
+
 shuntingYard :: Bool -> [Expr] -> [[Operator]] -> String -> Either ParseError Expr
 shuntingYard unary []     []        "" = Left EmptyInput
 shuntingYard unary []     operators "" = Left $ UnusedOperators $ concat operators
