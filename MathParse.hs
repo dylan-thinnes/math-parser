@@ -90,6 +90,8 @@ data ParseError = UnusedOperators   [Operator]
 parseToExpr :: String -> Either ParseError Expr
 parseToExpr = shuntingYard True [] []
 
+-- Shunting Yard Algorithm
+-- Look upon, ye mortals, and despair
 shuntingYard :: Bool -> [Expr] -> [[Operator]] -> String -> Either ParseError Expr
 shuntingYard unary []     []        "" = Left EmptyInput
 shuntingYard unary []     operators "" = Left $ UnusedOperators $ concat operators
