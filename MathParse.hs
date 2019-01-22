@@ -19,6 +19,14 @@ data Operator = Subtract
 enumerate :: (Bounded a, Enum a) => [a]
 enumerate = [minBound .. maxBound]
 
+rassoc, lassoc :: Operator -> Bool
+rassoc Exponentiate = True
+rassoc _            = False
+lassoc = not . rassoc
+
+prec :: Operator -> Int
+prec = fromEnum
+
 instance Show Operator where
     show CloseParen   = ")"
     show OpenParen    = "("
@@ -34,4 +42,3 @@ instance Read Operator where
                     , o <- enumerate
                     , s == show o
                     ]
-
