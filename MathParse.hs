@@ -9,6 +9,10 @@ data Expr = Num Integer
           | Expr :-: Expr
     deriving (Eq, Show, Read)
 
+data CalcError = TooLarge
+               | NegativePower
+    deriving (Show, Eq)
+
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Subtract
               | Add
@@ -46,3 +50,11 @@ instance Read Operator where
                     ]
 
 -- ================================== PARSING =================================
+
+data ParseError = UnusedOperators   [Operator]
+                | UnusedOperands    [Expr]
+                | NotEnoughOperators
+                | NotEnoughOperands Operator
+                | EmptyInput
+                | UnidentifiedToken String
+    deriving (Show, Eq)
