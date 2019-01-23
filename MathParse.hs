@@ -148,6 +148,7 @@ printParseError NotEnoughOperators = "There were not enough operators to complet
 printParseError EmptyInput = "Can't parse an empty input."
 printParseError (UnidentifiedToken tok) = "Unidentified token: " ++ tok
 
+-- Wrapper around shuntingYard
 parseToExpr :: String -> Either ParseError Expr
 parseToExpr = shuntingYard True [] []
 
@@ -156,6 +157,7 @@ parseToExprStr :: String -> Either String Expr
 parseToExprStr = left printParseError . parseToExpr
 
 -- Shunting Yard Algorithm
+-- Actually parses strings into expressions
 -- Look upon, ye mortals, and despair
 shuntingYard :: Bool -> [Expr] -> [[Operator]] -> String -> Either ParseError Expr
 shuntingYard unary []     []        "" = Left EmptyInput
