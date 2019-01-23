@@ -2,6 +2,7 @@ module MathParse where
 
 import Control.Monad (liftM2, foldM)
 import Control.Arrow (left)
+import Data.List (intersperse)
 import Data.Bits
 
 -- ======================== TYING IT ALL TOGETHER =============================
@@ -125,6 +126,14 @@ data ParseError = UnusedOperators   [Operator]
                 | EmptyInput
                 | UnidentifiedToken String
     deriving (Show, Eq)
+
+printParseError :: ParseError -> String
+printParseError (UnusedOperators ops) = "There were some unused operators: " ++ concat (intersperse ", " $ map show ops)
+printParseError (UnusedOperands exprs) = "There were some unused operands: " ++ concat (intersperse ", " $ map show exprs)
+printParseError (NotEnoughOperands op) = "There were not enough operands to satisfy the following operator: " ++ show op
+printParseError NotEnoughOperators = "There were not enough operators to complete the expression."
+printParseError EmptyInput = "Can't parse an empty input."
+printParseError (UnidentifiedToken tok) = "Unidentified token: " ++ tok
 
 parseToExpr :: String -> Either ParseError Expr
 parseToExpr = shuntingYard True [] []
