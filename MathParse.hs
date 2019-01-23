@@ -73,6 +73,10 @@ reduce (a :^: b) = liftM2 xor (reduce a) (reduce b)
 reduce (a :|: b) = liftM2 (.|.) (reduce a) (reduce b)
 reduce (a :=: b) = liftM2 (\x y -> toInteger $ fromEnum $ x == y) (reduce a) (reduce b)
 
+-- Reduces, but sanitizes errors to strings
+reduceStr :: Expr -> Either String Integer
+reduceStr = left printReduceError . reduce
+
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Equals
               | Or
@@ -146,6 +150,10 @@ printParseError (UnidentifiedToken tok) = "Unidentified token: " ++ tok
 
 parseToExpr :: String -> Either ParseError Expr
 parseToExpr = shuntingYard True [] []
+
+-- Parses expressions, but changes errors to strings
+parseToExprStr :: String -> Either String Expr
+parseToExprStr = left printParseError . parseToExpr
 
 -- Shunting Yard Algorithm
 -- Look upon, ye mortals, and despair
