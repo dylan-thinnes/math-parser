@@ -174,7 +174,7 @@ shuntingYard unary exprs  operators input
     = let (op,rest):_ = readsOp input
           ops' = insertOps operators op
        in if op == Subtract && unary == True
-          then if not $ null $ readsInt input
+          then if not $ null $ readsInt rest
               then do
                   let (i,rest'):_ = readsInt rest
                   let exprs'      = Num (-i) : exprs
