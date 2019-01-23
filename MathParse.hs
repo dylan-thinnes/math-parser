@@ -21,6 +21,15 @@ calculate s = do
     i <- left C $ reduce e
     return i
 
+-- Turns all errors into strings using printError before exiting
+calculateStr :: String -> Either String Integer
+calculateStr = left printError . calculate
+
+-- Prints unified ReduceError and ParseError
+printError :: Error -> String
+printError (C x) = printReduceError x
+printError (P x) = printParseError x
+
 -- ======================== EXPRESSIONS MANIPULATION ==========================
 data Expr = Num Integer
           | Expr :**: Expr
