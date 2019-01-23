@@ -1,2 +1,7 @@
-# Ignore all files that aren't explicitly tracked
-*
+# Ignore vim backup files
+*.swp
+*.swo
+
+# Ignore stack build files
+*.hi
+*.o
