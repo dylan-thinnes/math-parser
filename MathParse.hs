@@ -143,7 +143,7 @@ parseToExpr = shuntingYard True [] []
 shuntingYard :: Bool -> [Expr] -> [[Operator]] -> String -> Either ParseError Expr
 shuntingYard unary []     []        "" = Left EmptyInput
 shuntingYard unary []     operators "" = Left $ UnusedOperators $ concat operators
-shuntingYard unary [expr] operators "" = Right $ expr
+shuntingYard unary [expr] []        "" = Right $ expr
 shuntingYard unary exprs  []        "" = Left $ UnusedOperands exprs
 shuntingYard unary exprs  operators "" = head <$> applyAllOps exprs operators
 shuntingYard unary exprs  operators input
