@@ -37,6 +37,10 @@ data ReduceError = TooLarge
                  | NegativePower
     deriving (Show, Eq)
 
+printReduceError :: ReduceError -> String
+printReduceError TooLarge = "The expression entered was too large to be parsed."
+printReduceError NegativePower = "A number was raised to a negative power, which can't be computed because MathParse only works on Integral numbers."
+
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
 reduce (Num i)   = Right i
