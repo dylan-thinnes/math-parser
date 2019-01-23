@@ -24,6 +24,14 @@ Implementing more binary operators is trivial, so please feel free to ask in an
 issue if you would like any new operator specified, or feel free to write it
 yourself and submit a pull request!
 
+# Limits
+Attempting to take exponents of numbers that are too large will result in a
+TooLarge error being thrown. This is because MathExpr was originally designed
+to be part of a front-facing API.
+
+Removing these limits are trivial - please tell me if you would like them
+removed.
+
 # Algorithmic Underpinnings
 Refer to https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm for the explanation
 I referenced.
