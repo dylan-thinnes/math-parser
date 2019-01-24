@@ -21,7 +21,7 @@ calculate = calculateWithConstraints []
 calculateWithConstraints :: [Constraint] -> String -> Either Error Integer
 calculateWithConstraints constraints s = do
     e <- left P (parseToExpr s)
-    return $ left C $ reduceWithConstraints constraints e
+    left C $ reduceWithConstraints constraints e
 
 -- Prints unified ReduceError and ParseError
 printError :: Error -> String
