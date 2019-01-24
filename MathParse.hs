@@ -47,8 +47,11 @@ data Constraint = Constraint Operator Integer Integer
 
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
-reduce (Num i)   = Right i
-reduce (BinaryExpr op a b) = liftM2 (opToF op) (reduce a) (reduce b)
+reduce (Num i)             = Right i
+reduce (BinaryExpr op a b) = liftM2 (opToF op) a' b'
+    where
+    a' = reduce a
+    b' = reduce b
 
 -- Reduces, but sanitizes errors to strings
 reduceStr :: Expr -> Either String Integer
