@@ -21,7 +21,7 @@ calculate s = (left P $ parseToExpr s) >>= (left C . reduce)
 calculateWithConstraints :: [Constraint] -> String -> Either Error Integer
 calculateWithConstraints constraints s
   = left P (parseToExpr s)
-    >>= left C . reduceWithConstraints (constraintChecker constraints)
+    >>= left C . reduceWithConstraints constraints
 
 -- Prints unified ReduceError and ParseError
 printError :: Error -> String
@@ -49,24 +49,22 @@ data Constraint =
         err   :: ReduceError
     }
 
-type ConstraintChecker = Operator -> Integer -> Integer -> Maybe ReduceError
-
-constraintChecker :: [Constraint] -> ConstraintChecker
-constraintChecker []                      op a b = Nothing
-constraintChecker ((Constraint cOp aCond bCond err):cs) op a b
+check :: [Constraint] -> Operator -> Integer -> Integer -> Maybe ReduceError
+check []                      op a b = Nothing
+check ((Constraint cOp aCond bCond err):cs) op a b
   | op == cOp && aCond a && bCond b = Just err
-  | otherwise                       = constraintChecker cs op a b
+  | otherwise                       = check cs op a b
 
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
-reduce = reduceWithConstraints (\_ _ _ -> Nothing)
+reduce = reduceWithConstraints []
 
-reduceWithConstraints :: ConstraintChecker -> Expr -> Either ReduceError Integer
-reduceWithConstraints checker (Num i)               = Right i
-reduceWithConstraints checker e@(BinaryExpr op a b) = do
-    a' <- reduceWithConstraints checker a
-    b' <- reduceWithConstraints checker b
-    case checker op a' b' of
+reduceWithConstraints :: [Constraint] -> Expr -> Either ReduceError Integer
+reduceWithConstraints constraints (Num i)               = Right i
+reduceWithConstraints constraints e@(BinaryExpr op a b) = do
+    a' <- reduceWithConstraints constraints a
+    b' <- reduceWithConstraints constraints b
+    case check constraints op a' b' of
         Nothing  -> pure $ (opToF op) a' b'
         Just err -> Left err
 
