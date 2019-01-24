@@ -16,7 +16,7 @@ data Error = C ReduceError
 -- * exits with an error, or 
 -- * returns the integer from parsing the expression
 calculate :: String -> Either Error Integer
-calculate s = (left P $ parseToExpr s) >>= (left C . reduce)
+calculate = calculateWithConstraints []
 
 calculateWithConstraints :: [Constraint] -> String -> Either Error Integer
 calculateWithConstraints constraints s
