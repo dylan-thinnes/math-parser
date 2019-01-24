@@ -21,10 +21,6 @@ calculate s = do
     i <- left C $ reduce e
     return i
 
--- Turns all errors into strings using printError before exiting
-calculateStr :: String -> Either String Integer
-calculateStr = left printError . calculate
-
 -- Prints unified ReduceError and ParseError
 printError :: Error -> String
 printError (C x) = printReduceError x
@@ -71,10 +67,6 @@ reduceWithConstraints checker e@(BinaryExpr op a b) = do
     case checker op a' b' of
         Nothing  -> pure $ (opToF op) a' b'
         Just err -> Left err
-
--- Reduces, but sanitizes errors to strings
-reduceStr :: Expr -> Either String Integer
-reduceStr = left printReduceError . reduce
 
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Equals
@@ -161,10 +153,6 @@ printParseError (UnidentifiedToken tok) = "Unidentified token: " ++ tok
 -- Wrapper around shuntingYard
 parseToExpr :: String -> Either ParseError Expr
 parseToExpr = shuntingYard True [] []
-
--- Parses expressions, but changes errors to strings
-parseToExprStr :: String -> Either String Expr
-parseToExprStr = left printParseError . parseToExpr
 
 -- Shunting Yard Algorithm
 -- Actually parses strings into expressions
