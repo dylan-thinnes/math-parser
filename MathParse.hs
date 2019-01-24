@@ -31,7 +31,17 @@ printError (P x) = printParseError x
 -- ======================== EXPRESSIONS MANIPULATION ==========================
 data Expr = Num Integer
           | BinaryExpr Operator Expr Expr
-    deriving (Eq, Show, Read)
+    deriving (Eq, Read)
+
+instance Show Expr where
+    show (Num i) = show i
+    show (BinaryExpr op a b) = "(" 
+                            ++ show a 
+                            ++ " " 
+                            ++ show op 
+                            ++ " " 
+                            ++ show b 
+                            ++ ")"
 
 data ReduceError = TooLarge
                  | NegativePower
