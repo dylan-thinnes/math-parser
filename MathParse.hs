@@ -43,15 +43,28 @@ printReduceError :: ReduceError -> String
 printReduceError TooLarge = "The expression entered was too large to be parsed."
 printReduceError NegativePower = "A number was raised to a negative power, which can't be computed because MathParse only works on Integral numbers."
 
-data Constraint = Constraint Operator Integer Integer
+data Constraint = 
+    Constraint {
+        op    :: Operator,
+        aCond :: Integer -> Bool,
+        bCond :: Integer -> Bool,
+        err   :: ReduceError
+    }
+
+type ConstraintChecker = Operator -> Integer -> Integer -> Maybe ReduceError
 
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
-reduce (Num i)             = Right i
-reduce (BinaryExpr op a b) = liftM2 (opToF op) a' b'
-    where
-    a' = reduce a
-    b' = reduce b
+reduce = reduceWithConstraints (\_ _ _ -> Nothing)
+
+reduceWithConstraints :: ConstraintChecker -> Expr -> Either ReduceError Integer
+reduceWithConstraints checker (Num i)               = Right i
+reduceWithConstraints checker e@(BinaryExpr op a b) = do
+    a' <- reduceWithConstraints checker a
+    b' <- reduceWithConstraints checker b
+    case checker op a' b' of
+        Nothing  -> pure $ (opToF op) a' b'
+        Just err -> Left err
 
 -- Reduces, but sanitizes errors to strings
 reduceStr :: Expr -> Either String Integer
