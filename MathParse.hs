@@ -19,9 +19,9 @@ calculate :: String -> Either Error Integer
 calculate = calculateWithConstraints []
 
 calculateWithConstraints :: [Constraint] -> String -> Either Error Integer
-calculateWithConstraints constraints s
-  = left P (parseToExpr s)
-    >>= left C . reduceWithConstraints constraints
+calculateWithConstraints constraints s = do
+    e <- left P (parseToExpr s)
+    return $ left C $ reduceWithConstraints constraints e
 
 -- Prints unified ReduceError and ParseError
 printError :: Error -> String
