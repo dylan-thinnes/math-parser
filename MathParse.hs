@@ -16,10 +16,7 @@ data Error = C ReduceError
 -- * exits with an error, or 
 -- * returns the integer from parsing the expression
 calculate :: String -> Either Error Integer
-calculate s = do
-    e <- left P $ parseToExpr s
-    i <- left C $ reduce e
-    return i
+calculate s = (left P $ parseToExpr s) >>= (left C . reduce)
 
 -- Prints unified ReduceError and ParseError
 printError :: Error -> String
