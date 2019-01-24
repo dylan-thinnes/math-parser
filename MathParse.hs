@@ -32,15 +32,7 @@ printError (P x) = printParseError x
 
 -- ======================== EXPRESSIONS MANIPULATION ==========================
 data Expr = Num Integer
-          | Expr :**: Expr
-          | Expr :*: Expr
-          | Expr :/: Expr
-          | Expr :+: Expr
-          | Expr :-: Expr
-          | Expr :&: Expr
-          | Expr :^: Expr
-          | Expr :|: Expr
-          | Expr :=: Expr
+          | BinaryExpr Operator Expr Expr
     deriving (Eq, Show, Read)
 
 data ReduceError = TooLarge
@@ -54,24 +46,7 @@ printReduceError NegativePower = "A number was raised to a negative power, which
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
 reduce (Num i)   = Right i
-reduce (a :**: b) = do
-    a' <- reduce a
-    b' <- reduce b
-    if or [ b' > 1000000
-          , a' > 100 && b' > 100000
-          ] 
-    then Left TooLarge
-    else if b' < 0 
-    then Left NegativePower
-    else liftM2 (^) (reduce a) (reduce b)
-reduce (a :*: b) = liftM2 (*) (reduce a) (reduce b)
-reduce (a :/: b) = liftM2 div (reduce a) (reduce b)
-reduce (a :+: b) = liftM2 (+) (reduce a) (reduce b)
-reduce (a :-: b) = liftM2 (-) (reduce a) (reduce b)
-reduce (a :&: b) = liftM2 (.&.) (reduce a) (reduce b)
-reduce (a :^: b) = liftM2 xor (reduce a) (reduce b)
-reduce (a :|: b) = liftM2 (.|.) (reduce a) (reduce b)
-reduce (a :=: b) = liftM2 (\x y -> toInteger $ fromEnum $ x == y) (reduce a) (reduce b)
+reduce (BinaryExpr op a b) = liftM2 (opToF op) (reduce a) (reduce b)
 
 -- Reduces, but sanitizes errors to strings
 reduceStr :: Expr -> Either String Integer
@@ -89,6 +64,17 @@ data Operator = Equals
               | Exponentiate
               | OpenParen | CloseParen
     deriving (Eq, Enum, Ord, Bounded)
+
+opToF :: Operator -> (Integer -> Integer -> Integer)
+opToF Equals       = \x y -> toInteger $ fromEnum $ x == y
+opToF Or           = (.|.)
+opToF Xor          = xor
+opToF And          = (.&.)
+opToF Subtract     = (-)
+opToF Add          = (+)
+opToF Divide       = div
+opToF Times        = (*)
+opToF Exponentiate = (^)
 
 enumerate :: (Bounded a, Enum a) => [a]
 enumerate = [minBound .. maxBound]
@@ -233,14 +219,5 @@ applyOp :: [Expr] -> Operator -> Either ParseError [Expr]
 applyOp = applyBinaryOp
 
 applyBinaryOp :: [Expr] -> Operator -> Either ParseError [Expr]
-applyBinaryOp (a:b:xs) op = Right $ case op of
-                              Exponentiate -> (b :**: a):xs
-                              Times        -> (b :*: a):xs
-                              Divide       -> (b :/: a):xs
-                              Add          -> (b :+: a):xs
-                              Subtract     -> (b :-: a):xs
-                              And          -> (b :&: a):xs
-                              Xor          -> (b :^: a):xs
-                              Or           -> (b :|: a):xs
-                              Equals       -> (b :=: a):xs
+applyBinaryOp (a:b:xs) op = Right $ BinaryExpr op a b : xs
 applyBinaryOp _        op = Left $ NotEnoughOperands op
