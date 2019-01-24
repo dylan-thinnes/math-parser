@@ -9,7 +9,7 @@ import Data.Bits
 
 data Error = C ReduceError
            | P ParseError
-    deriving (Show, Eq)
+    deriving (Eq)
 
 -- Entry point for calculation
 -- Either 
@@ -24,9 +24,9 @@ calculateWithConstraints constraints s = do
     left C $ reduceWithConstraints constraints e
 
 -- Prints unified ReduceError and ParseError
-printError :: Error -> String
-printError (C x) = printReduceError x
-printError (P x) = printParseError x
+instance Show Error where
+    show (C x) = show x
+    show (P x) = show x
 
 -- ======================== EXPRESSIONS MANIPULATION ==========================
 data Expr = Num Integer
@@ -45,11 +45,11 @@ instance Show Expr where
 
 data ReduceError = TooLarge
                  | NegativePower
-    deriving (Show, Eq)
+    deriving (Eq)
 
-printReduceError :: ReduceError -> String
-printReduceError TooLarge = "The expression entered was too large to be parsed."
-printReduceError NegativePower = "A number was raised to a negative power, which can't be computed because MathParse only works on Integral numbers."
+instance Show ReduceError where
+    show TooLarge = "The expression entered was too large to be parsed."
+    show NegativePower = "A number was raised to a negative power, which can't be computed because MathParse only works on Integral numbers."
 
 data Constraint = 
     Constraint {
@@ -150,15 +150,15 @@ data ParseError = UnusedOperators   [Operator]
                 | NotEnoughOperands Operator
                 | EmptyInput
                 | UnidentifiedToken String
-    deriving (Show, Eq)
+    deriving (Eq)
 
-printParseError :: ParseError -> String
-printParseError (UnusedOperators ops) = "There were some unused operators: " ++ concat (intersperse ", " $ map show ops)
-printParseError (UnusedOperands exprs) = "There were some unused operands: " ++ concat (intersperse ", " $ map show exprs)
-printParseError (NotEnoughOperands op) = "There were not enough operands to satisfy the following operator: " ++ show op
-printParseError NotEnoughOperators = "There were not enough operators to complete the expression."
-printParseError EmptyInput = "Can't parse an empty input."
-printParseError (UnidentifiedToken tok) = "Unidentified token: " ++ tok
+instance Show ParseError where
+    show (UnusedOperators ops) = "There were some unused operators: " ++ concat (intersperse ", " $ map show ops)
+    show (UnusedOperands exprs) = "There were some unused operands: " ++ concat (intersperse ", " $ map show exprs)
+    show (NotEnoughOperands op) = "There were not enough operands to satisfy the following operator: " ++ show op
+    show NotEnoughOperators = "There were not enough operators to complete the expression."
+    show EmptyInput = "Can't parse an empty input."
+    show (UnidentifiedToken tok) = "Unidentified token: " ++ tok
 
 -- Wrapper around shuntingYard
 parseToExpr :: String -> Either ParseError Expr
