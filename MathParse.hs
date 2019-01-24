@@ -53,6 +53,12 @@ data Constraint =
 
 type ConstraintChecker = Operator -> Integer -> Integer -> Maybe ReduceError
 
+constraintChecker :: [Constraint] -> ConstraintChecker
+constraintChecker []                      op a b = Nothing
+constraintChecker ((Constraint cOp aCond bCond err):cs) op a b
+  | op == cOp && aCond a && bCond b = Just err
+  | otherwise                       = constraintChecker cs op a b
+
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
 reduce = reduceWithConstraints (\_ _ _ -> Nothing)
