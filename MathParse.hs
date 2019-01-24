@@ -18,6 +18,11 @@ data Error = C ReduceError
 calculate :: String -> Either Error Integer
 calculate s = (left P $ parseToExpr s) >>= (left C . reduce)
 
+calculateWithConstraints :: [Constraint] -> String -> Either Error Integer
+calculateWithConstraints constraints s
+  = left P (parseToExpr s)
+    >>= left C . reduceWithConstraints (constraintChecker constraints)
+
 -- Prints unified ReduceError and ParseError
 printError :: Error -> String
 printError (C x) = printReduceError x
