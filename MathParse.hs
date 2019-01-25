@@ -247,5 +247,5 @@ applyOp :: [Expr] -> Operator -> Either ParseError [Expr]
 applyOp = applyBinaryOp
 
 applyBinaryOp :: [Expr] -> Operator -> Either ParseError [Expr]
-applyBinaryOp (a:b:xs) op = Right $ BinaryExpr op a b : xs
+applyBinaryOp (a:b:xs) op = Right $ BinaryExpr op b a : xs
 applyBinaryOp _        op = Left $ NotEnoughOperands op
