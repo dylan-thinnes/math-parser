@@ -67,7 +67,13 @@ check ((Constraint cOp aCond bCond err):cs) op a b
 
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
-reduce = reduceWithConstraints []
+reduce = reduceSafe []
+
+-- Reduces an Expression with constraints, automatically protects against
+-- negative exponents
+reduceSafe :: [Constraint] -> Expr -> Either ReduceError Integer
+reduceSafe cs = reduceWithConstraints 
+              $ Constraint Exponentiate (const True) (<0) NegativePower : cs
 
 reduceWithConstraints :: [Constraint] -> Expr -> Either ReduceError Integer
 reduceWithConstraints constraints (Num i)               = Right i
