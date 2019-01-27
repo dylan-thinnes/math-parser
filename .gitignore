@@ -5,3 +5,4 @@
 # Ignore stack build files
 *.hi
 *.o
+*.stack-work
