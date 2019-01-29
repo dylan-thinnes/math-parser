@@ -23,7 +23,7 @@ calculate = calculateWithConstraints []
 calculateWithConstraints :: [Constraint Integer] -> String -> Either Error Integer
 calculateWithConstraints constraints s = do
     e <- left P (parseToExpr s)
-    left C $ reduceWithConstraints constraints e
+    left C $ runReduce (reduceWithConstraints constraints) e
 
 -- Prints unified ReduceError and ParseError
 instance Show Error where
@@ -78,16 +78,18 @@ check :: [Constraint a] -> ExprF a -> Maybe ReduceError
 check [] _ = Nothing
 check ((Constraint conds err):cs) expression = undefined
 
+runReduce = cata
+
 -- Reduces an Expression into a final integer, or exits with a ReduceError
-reduce :: Expr -> Either ReduceError Integer
+reduce :: ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduce = undefined
 
 -- Reduces an Expression with constraints, automatically protects against
 -- negative exponents
-reduceSafe :: [Constraint Integer] -> Expr -> Either ReduceError Integer
+reduceSafe :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduceSafe cs = undefined
 
-reduceWithConstraints :: [Constraint Integer] -> Expr -> Either ReduceError Integer
+reduceWithConstraints :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduceWithConstraints constraints e = undefined
 
 -- ============================ OPERATOR MANIPULATION =========================
