@@ -67,22 +67,15 @@ check ((Constraint cOp aCond bCond err):cs) op a b
 
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
-reduce = reduceSafe []
+reduce = undefined
 
 -- Reduces an Expression with constraints, automatically protects against
 -- negative exponents
 reduceSafe :: [Constraint] -> Expr -> Either ReduceError Integer
-reduceSafe cs = reduceWithConstraints 
-              $ Constraint Exponentiate (const True) (<0) NegativePower : cs
+reduceSafe cs = undefined
 
 reduceWithConstraints :: [Constraint] -> Expr -> Either ReduceError Integer
-reduceWithConstraints constraints (Num i)               = Right i
-reduceWithConstraints constraints e@(BinaryExpr op a b) = do
-    a' <- reduceWithConstraints constraints a
-    b' <- reduceWithConstraints constraints b
-    case check constraints op a' b' of
-        Nothing  -> pure $ (opToF op) a' b'
-        Just err -> Left err
+reduceWithConstraints constraints e = undefined
 
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Equals
