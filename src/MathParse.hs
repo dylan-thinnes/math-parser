@@ -20,7 +20,7 @@ data Error = C ReduceError
 calculate :: String -> Either Error Integer
 calculate = calculateWithConstraints []
 
-calculateWithConstraints :: [Constraint] -> String -> Either Error Integer
+calculateWithConstraints :: [Constraint Integer] -> String -> Either Error Integer
 calculateWithConstraints constraints s = do
     e <- left P (parseToExpr s)
     left C $ reduceWithConstraints constraints e
@@ -69,19 +69,14 @@ instance Show ReduceError where
     show TooLarge = "The expression entered was too large to be parsed."
     show NegativePower = "A number was raised to a negative power, which can't be computed because MathParse only works on Integral numbers."
 
-data Constraint = 
-    Constraint {
-        op    :: Operator,
-        aCond :: Integer -> Bool,
-        bCond :: Integer -> Bool,
-        err   :: ReduceError
+data Constraint a = Constraint
+    { conds :: ExprF (a -> Bool)
+    , err   :: ReduceError
     }
 
-check :: [Constraint] -> Operator -> Integer -> Integer -> Maybe ReduceError
-check []                      op a b = Nothing
-check ((Constraint cOp aCond bCond err):cs) op a b
-  | op == cOp && aCond a && bCond b = Just err
-  | otherwise                       = check cs op a b
+check :: [Constraint a] -> ExprF a -> Maybe ReduceError
+check [] _ = Nothing
+check ((Constraint conds err):cs) expression = undefined
 
 -- Reduces an Expression into a final integer, or exits with a ReduceError
 reduce :: Expr -> Either ReduceError Integer
@@ -89,10 +84,10 @@ reduce = undefined
 
 -- Reduces an Expression with constraints, automatically protects against
 -- negative exponents
-reduceSafe :: [Constraint] -> Expr -> Either ReduceError Integer
+reduceSafe :: [Constraint Integer] -> Expr -> Either ReduceError Integer
 reduceSafe cs = undefined
 
-reduceWithConstraints :: [Constraint] -> Expr -> Either ReduceError Integer
+reduceWithConstraints :: [Constraint Integer] -> Expr -> Either ReduceError Integer
 reduceWithConstraints constraints e = undefined
 
 -- ============================ OPERATOR MANIPULATION =========================
