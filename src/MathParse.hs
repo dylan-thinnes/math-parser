@@ -99,7 +99,13 @@ reduce = undefined
 -- Reduces a single layer expression into an integer, with constraints,
 -- automatically protects against negative exponents
 reduceSafe :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
-reduceSafe cs = undefined
+reduceSafe cs = reduceWithConstraints (negativePower:cs)
+
+negativePower :: Constraint Integer
+negativePower = Constraint 
+    { conds = BinaryExprF Exponentiate (const True) (<0)
+    , err   = NegativePower
+    }
 
 reduceWithConstraints :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduceWithConstraints constraints e = undefined
