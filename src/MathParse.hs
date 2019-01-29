@@ -1,9 +1,11 @@
+{-# LANGUAGE DeriveFunctor, TypeFamilies, InstanceSigs #-}
 module MathParse where
 
 import Control.Monad (liftM2, foldM)
 import Control.Arrow (left)
 import Data.List (intersperse)
 import Data.Bits
+import Data.Functor.Foldable
 
 -- ======================== TYING IT ALL TOGETHER =============================
 
@@ -32,6 +34,22 @@ instance Show Error where
 data Expr = Num Integer
           | BinaryExpr Operator Expr Expr
     deriving (Eq, Read)
+
+data ExprF a = NumF Integer
+             | BinaryExprF Operator a a
+    deriving Functor
+
+type instance Base Expr = ExprF
+
+instance Recursive Expr where
+    project :: Expr -> ExprF Expr
+    project (Num i) = NumF i
+    project (BinaryExpr op a b) = BinaryExprF op a b
+
+instance Corecursive Expr where
+    embed :: ExprF Expr -> Expr
+    embed (NumF i) = Num i
+    embed (BinaryExprF op a b) = BinaryExpr op a b
 
 instance Show Expr where
     show (Num i) = show i
