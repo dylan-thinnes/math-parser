@@ -116,7 +116,11 @@ zeroDivision = Constraint
     }
 
 reduceWithConstraints :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
-reduceWithConstraints constraints e = undefined
+reduceWithConstraints constraints (NumF i) = return $ reduce (NumF i)
+reduceWithConstraints constraints (BinaryExprF op a b) = do
+    fstExpr <- a
+    sndExpr <- b
+    return $ reduce (BinaryExprF op fstExpr sndExpr)
 
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Equals
