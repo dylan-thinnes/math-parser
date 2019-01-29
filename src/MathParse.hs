@@ -74,9 +74,20 @@ data Constraint a = Constraint
     , err   :: ReduceError
     }
 
-check :: [Constraint a] -> ExprF a -> Maybe ReduceError
-check [] _ = Nothing
-check ((Constraint conds err):cs) expression = undefined
+check :: Constraint a -> ExprF a -> Maybe ReduceError
+check (Constraint conds err) expression
+    | (BinaryExprF predOp predA predB) <- conds
+    , (BinaryExprF op     a     b    ) <- expression
+    , predOp == op && predA a && predB b
+    = Just err
+    | otherwise
+    = Nothing
+
+checkAll :: [Constraint a] -> ExprF a -> Maybe ReduceError
+checkAll constraints expression 
+  = case filter (/= Nothing) $ map (flip check expression) constraints of
+      []     -> Nothing
+      (x:xs) -> x
 
 -- Executes a reduction as a catamorphism
 runReduce = cata
