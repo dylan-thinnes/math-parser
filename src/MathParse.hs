@@ -19,7 +19,7 @@ data Error = C ReduceError
 -- * exits with an error, or 
 -- * returns the integer from parsing the expression
 calculate :: String -> Either Error Integer
-calculate = calculateWithConstraints []
+calculate = calculateSafe []
 
 calculateSafe :: [Constraint Integer] -> String -> Either Error Integer
 calculateSafe constraints s = do
