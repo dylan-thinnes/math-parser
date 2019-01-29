@@ -78,14 +78,16 @@ check :: [Constraint a] -> ExprF a -> Maybe ReduceError
 check [] _ = Nothing
 check ((Constraint conds err):cs) expression = undefined
 
+-- Executes a reduction as a catamorphism
 runReduce = cata
 
--- Reduces an Expression into a final integer, or exits with a ReduceError
+-- Reduces a single layer expression into an integer, or exit with a
+-- ReduceError
 reduce :: ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduce = undefined
 
--- Reduces an Expression with constraints, automatically protects against
--- negative exponents
+-- Reduces a single layer expression into an integer, with constraints,
+-- automatically protects against negative exponents
 reduceSafe :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduceSafe cs = undefined
 
