@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fbe4615bad87657f7c4226982da8b4ac00a622db50dd6d704d3509f23eb07686
+-- hash: f1af3f33204fd92c8de4b32ff472f2a198e4c6e95b7b0fc5037be45e8cbd0bb5
 
 name:           math-parse
 version:        0.1.0.0
@@ -33,5 +33,5 @@ library
       src
   build-depends:
       base >=4.7 && <5
-    , recursion-schemes
+    , recursion-schemes >=5.1 && <6
   default-language: Haskell2010
