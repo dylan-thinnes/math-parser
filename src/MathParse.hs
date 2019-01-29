@@ -9,7 +9,7 @@ import Data.Maybe (listToMaybe, mapMaybe)
 import Data.Functor.Foldable
 
 -- ======================== TYING IT ALL TOGETHER =============================
-
+-- Tagged union of Reduce and Parse errors
 data Error = C ReduceError
            | P ParseError
     deriving (Eq)
@@ -108,18 +108,22 @@ reduce (BinaryExprF op a b) = opToF op a b
 reduceSafe :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduceSafe cs = reduceWithConstraints (zeroDivision:negativePower:cs)
 
+-- Constraint for checking if num being taken to a negative power
 negativePower :: Constraint Integer
 negativePower = Constraint 
     { conds = BinaryExprF Exponentiate (const True) (<0)
     , err   = NegativePower
     }
 
+-- Constraint for checking if division by zero
 zeroDivision :: Constraint Integer
 zeroDivision = Constraint 
     { conds = BinaryExprF Divide (const True) (==0)
     , err   = ZeroDivision
     }
 
+-- Reduces a single layer expression into an integer, with constraints,
+-- automatically protects against negative exponents
 reduceWithConstraints :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduceWithConstraints constraints (NumF i) = return $ reduce (NumF i)
 reduceWithConstraints constraints (BinaryExprF op a b) = do
