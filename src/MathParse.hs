@@ -21,6 +21,11 @@ data Error = C ReduceError
 calculate :: String -> Either Error Integer
 calculate = calculateWithConstraints []
 
+calculateSafe :: [Constraint Integer] -> String -> Either Error Integer
+calculateSafe constraints s = do
+    e <- left P (parseToExpr s)
+    left C $ runReduce (reduceSafe constraints) e
+
 calculateWithConstraints :: [Constraint Integer] -> String -> Either Error Integer
 calculateWithConstraints constraints s = do
     e <- left P (parseToExpr s)
