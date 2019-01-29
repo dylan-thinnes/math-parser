@@ -5,6 +5,7 @@ import Control.Monad (liftM2, foldM)
 import Control.Arrow (left)
 import Data.List (intersperse)
 import Data.Bits
+import Data.Maybe (listToMaybe, mapMaybe)
 import Data.Functor.Foldable
 
 -- ======================== TYING IT ALL TOGETHER =============================
@@ -85,9 +86,7 @@ check (Constraint conds err) expression
 
 checkAll :: [Constraint a] -> ExprF a -> Maybe ReduceError
 checkAll constraints expression 
-  = case filter (/= Nothing) $ map (flip check expression) constraints of
-      []     -> Nothing
-      (x:xs) -> x
+  = listToMaybe $ mapMaybe (flip check expression) constraints
 
 -- Executes a reduction as a catamorphism
 runReduce = cata
