@@ -93,10 +93,10 @@ checkAll constraints expression
 -- Executes a reduction as a catamorphism
 runReduce = cata
 
--- Reduces a single layer expression into an integer, or exit with a
--- ReduceError
-reduce :: ExprF (Either ReduceError Integer) -> Either ReduceError Integer
-reduce = undefined
+-- Reduces a single layer expression into an integer
+reduce :: ExprF Integer -> Integer
+reduce (NumF i) = i
+reduce (BinaryExprF op a b) = opToF op a b
 
 -- Reduces a single layer expression into an integer, with constraints,
 -- automatically protects against negative exponents
