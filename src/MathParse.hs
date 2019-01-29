@@ -125,7 +125,10 @@ reduceWithConstraints constraints (NumF i) = return $ reduce (NumF i)
 reduceWithConstraints constraints (BinaryExprF op a b) = do
     fstExpr <- a
     sndExpr <- b
-    return $ reduce (BinaryExprF op fstExpr sndExpr)
+    let pureExpr = BinaryExprF op fstExpr sndExpr
+    case checkAll constraints pureExpr of
+      Nothing  -> return $ reduce pureExpr
+      Just err -> Left err
 
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Equals
