@@ -64,11 +64,13 @@ instance Show Expr where
 
 data ReduceError = TooLarge
                  | NegativePower
+                 | ZeroDivision
     deriving (Eq)
 
 instance Show ReduceError where
     show TooLarge = "The expression entered was too large to be parsed."
     show NegativePower = "A number was raised to a negative power, which can't be computed because MathParse only works on Integral numbers."
+    show ZeroDivision = "A number was divided by zero, which can't be computed as division by zero is undefined."
 
 data Constraint a = Constraint
     { conds :: ExprF (a -> Bool)
@@ -99,12 +101,18 @@ reduce = undefined
 -- Reduces a single layer expression into an integer, with constraints,
 -- automatically protects against negative exponents
 reduceSafe :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
-reduceSafe cs = reduceWithConstraints (negativePower:cs)
+reduceSafe cs = reduceWithConstraints (zeroDivision:negativePower:cs)
 
 negativePower :: Constraint Integer
 negativePower = Constraint 
     { conds = BinaryExprF Exponentiate (const True) (<0)
     , err   = NegativePower
+    }
+
+zeroDivision :: Constraint Integer
+zeroDivision = Constraint 
+    { conds = BinaryExprF Divide (const True) (==0)
+    , err   = ZeroDivision
     }
 
 reduceWithConstraints :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
