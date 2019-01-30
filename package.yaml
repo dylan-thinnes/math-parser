@@ -1,7 +1,7 @@
 name:                math-parse
 version:             0.1.0.0
 github:              "dylan-thinnes/math-parse"
-license:             BSD3
+license:             MIT
 author:              "Dylan Thinnes"
 maintainer:          "dylan.thinnes@protonmail.com"
 copyright:           "2019 Dylan Thinnes"
