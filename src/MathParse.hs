@@ -253,12 +253,12 @@ parseToExpr = shuntingYard True [] []
 -- Actually parses strings into expressions
 -- Look upon, ye mortals, and despair
 shuntingYard :: Bool -> [Expr] -> [[Operator]] -> String -> Either ParseError Expr
-shuntingYard unary []     []        "" = Left EmptyInput
-shuntingYard unary []     operators "" = Left $ UnusedOperators $ concat operators
-shuntingYard unary [expr] []        "" = Right $ expr
-shuntingYard unary exprs  []        "" = Left $ UnusedOperands exprs
-shuntingYard unary exprs  operators "" = head <$> applyAllOps exprs operators
-shuntingYard unary exprs  operators input
+shuntingYard needsUnary []     []        "" = Left EmptyInput
+shuntingYard needsUnary []     operators "" = Left $ UnusedOperators $ concat operators
+shuntingYard needsUnary [expr] []        "" = Right $ expr
+shuntingYard needsUnary exprs  []        "" = Left $ UnusedOperands exprs
+shuntingYard needsUnary exprs  operators "" = head <$> applyAllOps exprs operators
+shuntingYard needsUnary exprs  operators input
     | not $ null $ readsInt input 
     = let (i,rest):_ = readsInt input
           exprs'     = Num i : exprs
@@ -266,7 +266,7 @@ shuntingYard unary exprs  operators input
     | not $ null $ readsOp input 
     = let (op,rest):_ = readsOp input
           ops' = insertOps operators op
-       in if op == Subtract && unary == True
+       in if op == Subtract && needsUnary == True
           then if not $ null $ readsInt rest
               then do
                   let (i,rest'):_ = readsInt rest
