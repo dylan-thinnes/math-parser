@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f1af3f33204fd92c8de4b32ff472f2a198e4c6e95b7b0fc5037be45e8cbd0bb5
+-- hash: c4c0bd95640ab3ae47eac3a12adcf6884115bc6e2c2084ea5eb787475a3016d1
 
 name:           math-parse
 version:        0.1.0.0
@@ -12,7 +12,7 @@ bug-reports:    https://github.com/dylan-thinnes/math-parse/issues
 author:         Dylan Thinnes
 maintainer:     dylan.thinnes@protonmail.com
 copyright:      2019 Dylan Thinnes
-license:        BSD3
+license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 cabal-version:  >= 1.10
