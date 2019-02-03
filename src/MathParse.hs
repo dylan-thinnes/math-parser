@@ -156,6 +156,7 @@ reduceWithConstraints constraints (BinaryExprF op a b) = do
 
 -- ============================ OPERATOR MANIPULATION =========================
 data Operator = Equals
+              | Not
               | Or
               | Xor
               | And
@@ -180,9 +181,11 @@ binOpToF Exponentiate = (^)
 
 unOpToF :: Operator -> (Integer -> Integer)
 unOpToF Subtract = negate
+unOpToF Not      = complement
 
 isUnary, isBinary :: Operator -> Bool
 isUnary  Subtract = True
+isUnary  Not      = True
 isUnary  _        = False
 isBinary Subtract = True
 isBinary x        = not $ isUnary x
@@ -209,6 +212,7 @@ instance Show Operator where
     show And          = "&"
     show Xor          = "^"
     show Or           = "|"
+    show Not          = "not"
     show Equals       = "="
 
 instance Read Operator where
