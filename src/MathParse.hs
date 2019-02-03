@@ -266,11 +266,11 @@ shuntingYard needsUnary exprs  operators input
     | not $ null $ readsOp input 
     = let (op,rest):_ = readsOp input
           ops' = insertOps operators op
-       in if op == Subtract && needsUnary == True
+       in if isUnary op && needsUnary == True
           then if not $ null $ readsInt rest
               then do
                   let (i,rest'):_ = readsInt rest
-                  let exprs'      = Num (-i) : exprs
+                  let exprs'      = UnaryExpr op (Num i) : exprs
                   shuntingYard False exprs' operators rest'
               else Left $ NotEnoughOperands Subtract
           else if opNeedsPopping operators op
