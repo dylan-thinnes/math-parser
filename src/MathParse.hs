@@ -114,8 +114,8 @@ runReduce = cata
 -- Reduces a single layer expression into an integer
 reduce :: ExprF Integer -> Integer
 reduce (NumF i) = i
-reduce (BinaryExprF op a b) = opToF op a b
-reduce (UnaryExprF op a) = undefined
+reduce (BinaryExprF op a b) = binOpToF op a b
+reduce (UnaryExprF op a) = unOpToF op a
 
 -- Reduces a single layer expression into an integer, with constraints,
 -- automatically protects against negative exponents
@@ -167,16 +167,25 @@ data Operator = Equals
               | OpenParen | CloseParen
     deriving (Eq, Enum, Ord, Bounded)
 
-opToF :: Operator -> (Integer -> Integer -> Integer)
-opToF Equals       = \x y -> toInteger $ fromEnum $ x == y
-opToF Or           = (.|.)
-opToF Xor          = xor
-opToF And          = (.&.)
-opToF Subtract     = (-)
-opToF Add          = (+)
-opToF Divide       = div
-opToF Times        = (*)
-opToF Exponentiate = (^)
+binOpToF :: Operator -> (Integer -> Integer -> Integer)
+binOpToF Equals       = \x y -> toInteger $ fromEnum $ x == y
+binOpToF Or           = (.|.)
+binOpToF Xor          = xor
+binOpToF And          = (.&.)
+binOpToF Subtract     = (-)
+binOpToF Add          = (+)
+binOpToF Divide       = div
+binOpToF Times        = (*)
+binOpToF Exponentiate = (^)
+
+unOpToF :: Operator -> (Integer -> Integer)
+unOpToF Subtract = negate
+
+isUnary, isBinary :: Operator -> Bool
+isUnary  Subtract = True
+isUnary  _        = False
+isBinary Subtract = True
+isBinary x        = not $ isUnary x
 
 enumerate :: (Bounded a, Enum a) => [a]
 enumerate = [minBound .. maxBound]
