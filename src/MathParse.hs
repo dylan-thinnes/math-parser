@@ -39,10 +39,12 @@ instance Show Error where
 -- ======================== EXPRESSIONS MANIPULATION ==========================
 data Expr = Num Integer
           | BinaryExpr Operator Expr Expr
+          | UnaryExpr  Operator Expr
     deriving (Eq, Read)
 
 data ExprF a = NumF Integer
              | BinaryExprF Operator a a
+             | UnaryExprF  Operator a
     deriving Functor
 
 type instance Base Expr = ExprF
@@ -51,11 +53,13 @@ instance Recursive Expr where
     project :: Expr -> ExprF Expr
     project (Num i) = NumF i
     project (BinaryExpr op a b) = BinaryExprF op a b
+    project (UnaryExpr op a) = UnaryExprF op a
 
 instance Corecursive Expr where
     embed :: ExprF Expr -> Expr
     embed (NumF i) = Num i
     embed (BinaryExprF op a b) = BinaryExpr op a b
+    embed (UnaryExprF op a) = UnaryExpr op a
 
 instance Show Expr where
     show (Num i) = show i
@@ -66,6 +70,11 @@ instance Show Expr where
                             ++ " " 
                             ++ show b 
                             ++ ")"
+    show (UnaryExpr op a) = "(" 
+                         ++ show op 
+                         ++ " " 
+                         ++ show a 
+                         ++ ")"
 
 data ReduceError = TooLarge
                  | NegativePower
@@ -88,6 +97,10 @@ check (Constraint conds err) expression
     , (BinaryExprF op     a     b    ) <- expression
     , predOp == op && predA a && predB b
     = Just err
+    | (UnaryExprF predOp predA) <- conds
+    , (UnaryExprF op     a    ) <- expression
+    , predOp == op && predA a
+    = Just err
     | otherwise
     = Nothing
 
@@ -102,6 +115,7 @@ runReduce = cata
 reduce :: ExprF Integer -> Integer
 reduce (NumF i) = i
 reduce (BinaryExprF op a b) = opToF op a b
+reduce (UnaryExprF op a) = undefined
 
 -- Reduces a single layer expression into an integer, with constraints,
 -- automatically protects against negative exponents
@@ -126,6 +140,12 @@ zeroDivision = Constraint
 -- automatically protects against negative exponents
 reduceWithConstraints :: [Constraint Integer] -> ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 reduceWithConstraints constraints (NumF i) = return $ reduce (NumF i)
+reduceWithConstraints constraints (UnaryExprF op a) = do
+    fstExpr <- a
+    let pureExpr = UnaryExprF op fstExpr
+    case checkAll constraints pureExpr of
+      Nothing  -> return $ reduce pureExpr
+      Just err -> Left err
 reduceWithConstraints constraints (BinaryExprF op a b) = do
     fstExpr <- a
     sndExpr <- b
