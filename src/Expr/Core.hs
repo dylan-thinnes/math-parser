@@ -30,6 +30,8 @@ instance Corecursive Expr where
 
 -- Operators
 data UnOp = Negate
+          | Not
+          | Factorial
     deriving (Eq, Enum, Ord, Bounded, Show, Read)
 
 data BinOp = Exponentiate
