@@ -4,10 +4,20 @@ module Expr.Parse where
 import Expr.Core
 import Text.ParserCombinators.ReadP
 import qualified Control.Monad.Combinators.Expr as CExpr
+import Control.Applicative ((<|>))
 
 -- ============================ READING IN EXPRESSIONS ========================
 equation :: ReadP Expr
-equation = CExpr.makeExprParser rnum opTable
+equation = CExpr.makeExprParser term opTable
+
+term :: ReadP Expr
+term = parens <|> rnum
+
+parens :: ReadP Expr
+parens = between 
+    (skipSpaces >> string "(") 
+    (skipSpaces >> string ")")
+    equation
 
 rnum :: ReadP Expr
 rnum = do
