@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c4c0bd95640ab3ae47eac3a12adcf6884115bc6e2c2084ea5eb787475a3016d1
+-- hash: 1d5129bf07fa231d7a5b5ad29d2b815859a7edf7653728d7cf2055cd52f51b0d
 
 name:           math-parse
 version:        0.1.0.0
@@ -26,12 +26,19 @@ source-repository head
 
 library
   exposed-modules:
+      Expr
+      Expr.Core
+      Expr.Parse
+      Expr.Reduce
       MathParse
+      PrecParse
   other-modules:
       Paths_math_parse
   hs-source-dirs:
       src
   build-depends:
       base >=4.7 && <5
+    , parser-combinators
     , recursion-schemes >=5.1 && <6
+    , text
   default-language: Haskell2010
