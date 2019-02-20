@@ -5,6 +5,15 @@ import Expr.Core
 import Text.ParserCombinators.ReadP
 import qualified Control.Monad.Combinators.Expr as CExpr
 
+-- ============================ READING IN EXPRESSIONS ========================
+rnum :: ReadP Expr
+rnum = do
+    skipSpaces
+    i <- readS_to_P reads
+    if i < 0 
+    then pfail
+    else pure $ Num i
+
 -- ============================ OPERATOR MANIPULATION =========================
 -- Table of Operators
 opTable, binTable, unTable :: [[CExpr.Operator ReadP Expr]]
