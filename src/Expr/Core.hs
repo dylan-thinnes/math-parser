@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveFunctor, TypeFamilies, InstanceSigs #-}
 module Expr.Core where
 
 import Data.Functor.Foldable
