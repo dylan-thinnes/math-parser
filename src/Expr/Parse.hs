@@ -3,6 +3,12 @@ module Expr.Parse where
 
 import Expr.Core
 
+-- Operator Typeclass
+class (Show a) => Operator a where
+    symbols :: a -> [String]
+    expr :: a -> Expr -> Expr -> Expr
+    wrap :: (Monad m) => a -> (m (Expr -> Expr -> Expr)) -> CExpr.Operator m Expr
+
 -- Binary Operators
 rassoc, lassoc :: BinOp -> Bool
 rassoc Exponentiate = True
