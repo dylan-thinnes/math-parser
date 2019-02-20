@@ -1,4 +1,7 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Expr.Parse where
+
+import Expr.Core
 
 -- Binary Operators
 rassoc, lassoc :: BinOp -> Bool
