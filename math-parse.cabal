@@ -2,7 +2,7 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1d5129bf07fa231d7a5b5ad29d2b815859a7edf7653728d7cf2055cd52f51b0d
+-- hash: a30dcc81319f7d535effc20e60836cdf67ebf38a20c4b395fd4eac2a106498ed
 
 name:           math-parse
 version:        0.1.0.0
@@ -30,8 +30,6 @@ library
       Expr.Core
       Expr.Parse
       Expr.Reduce
-      MathParse
-      PrecParse
   other-modules:
       Paths_math_parse
   hs-source-dirs:

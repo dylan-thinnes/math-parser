@@ -11,6 +11,29 @@ class (Show a) => Operator a where
     expr :: a -> Expr -> Expr -> Expr
     wrap :: (Monad m) => a -> (m (Expr -> Expr -> Expr)) -> CExpr.Operator m Expr
 
+instance Operator BinOp where
+    symbols Exponentiate = ["**","^"]
+    symbols Multiply     = ["*"]
+    symbols Divide       = ["/"]
+    symbols Add          = ["+"]
+    symbols Subtract     = ["-"]
+    symbols And          = ["&"]
+    symbols Xor          = ["xor"]
+    symbols Or           = ["|"]
+    symbols Equals       = ["="]
+    expr op = BinaryExpr op
+    wrap op | rassoc op = CExpr.InfixR
+            | lassoc op = CExpr.InfixL
+            | otherwise = CExpr.InfixN
+
+instance Operator UnOp where
+    symbols Factorial = ["!"]
+    symbols Not       = ["!","not"]
+    symbols Negate    = ["-"]
+    expr op = const $ UnaryExpr op
+    wrap op | pre  op = CExpr.Prefix  . (<*> pure undefined)
+            | post op = CExpr.Postfix . (<*> pure undefined)
+
 rop :: (Operator a) => a -> ReadP a
 rop op = choice $ map (\s -> op <$ (skipSpaces >> string s)) $ symbols op
 
