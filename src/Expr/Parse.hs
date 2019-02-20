@@ -5,6 +5,16 @@ import Expr.Core
 import Text.ParserCombinators.ReadP
 import qualified Control.Monad.Combinators.Expr as CExpr
 
+-- ============================ OPERATOR MANIPULATION =========================
+-- Table of Operators
+opTable, binTable, unTable :: [[CExpr.Operator ReadP Expr]]
+opTable  = unTable ++ binTable
+unTable  = map ((:[]).toTableEntry) (enumerate :: [UnOp])
+binTable = map ((:[]).toTableEntry) (enumerate :: [BinOp])
+
+enumerate :: (Bounded a, Enum a) => [a]
+enumerate = [minBound .. maxBound]
+
 -- Operator Typeclass
 class (Show a) => Operator a where
     symbols :: a -> [String]
