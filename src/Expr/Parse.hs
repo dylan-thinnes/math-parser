@@ -3,10 +3,15 @@ module Expr.Parse where
 
 import Expr.Core
 import Text.ParserCombinators.ReadP
+import Text.Read (readPrec)
+import Text.ParserCombinators.ReadPrec (lift)
 import qualified Control.Monad.Combinators.Expr as CExpr
 import Control.Applicative ((<|>))
 
 -- ============================ READING IN EXPRESSIONS ========================
+instance Read Expr where
+    readPrec = lift equation
+
 equation :: ReadP Expr
 equation = CExpr.makeExprParser term opTable
 
