@@ -2,6 +2,8 @@
 module Expr.Parse where
 
 import Expr.Core
+import Text.ParserCombinators.ReadP
+import qualified Control.Monad.Combinators.Expr as CExpr
 
 -- Operator Typeclass
 class (Show a) => Operator a where
