@@ -1,5 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Expr.Parse where
+module Expr.Parse
+    ( Expr(..)
+    , ParseError
+    , prettyPrint
+    , parseToExpr
+    ) where
 
 import Expr.Core
 

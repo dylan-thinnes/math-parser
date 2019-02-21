@@ -1,4 +1,11 @@
-module Expr.Reduce where
+module Expr.Reduce
+    ( Constraint(..)
+    , ReduceError(..)
+    , runReduce
+    , reduce, reduceSafe, reduceWithConstraints
+    , negativePower, zeroDivision
+    , binOpToF, unOpToF
+    ) where
 
 import Expr.Core
 import Data.Bits
