@@ -8,6 +8,8 @@ import Text.ParserCombinators.ReadPrec (lift)
 import qualified Control.Monad.Combinators.Expr as CExpr
 import Control.Applicative ((<|>))
 
+-- ============================ ERROR HANDLING ================================
+
 -- ============================ READING IN EXPRESSIONS ========================
 instance Read Expr where
     readPrec = lift equation
