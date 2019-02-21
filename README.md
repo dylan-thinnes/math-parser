@@ -17,7 +17,7 @@ precedence (highest to lowest):
 |  -   | Left  | Subtract second operand from first               |
 |  &   | Left  | Bitwise and of both operands                     |
 |  ^   | Left  | Bitwise xor of both operands                     |
-|  |   | Left  | Bitwise or of both operands                      |
+| \|   | Left  | Bitwise or of both operands                      |
 |  =   | Left  | Outputs 1 if the operands are equal, 0 otherwise |
 
 Implementing more binary operators is trivial, so please feel free to ask in an
