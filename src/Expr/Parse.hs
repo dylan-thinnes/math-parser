@@ -7,8 +7,23 @@ import Text.Read (readPrec)
 import Text.ParserCombinators.ReadPrec (lift)
 import qualified Control.Monad.Combinators.Expr as CExpr
 import Control.Applicative ((<|>))
+import Data.Functor.Foldable (cata)
+import qualified Data.Text as T
 
 -- ============================ ERROR HANDLING ================================
+prettyPrint :: Expr -> String
+prettyPrint = T.unpack . cata f
+    where
+    f :: ExprF T.Text -> T.Text
+    f (BinaryExprF op t1 t2)
+      = T.concat ["(", t1, " ", T.pack $ head $ symbols op, " ", t2, ")"]
+    f (UnaryExprF op t)
+      | pre op
+      = T.concat ["(", T.pack $ head $ symbols op, t, ")"]
+      | post op
+      = T.concat ["(", t, T.pack $ head $ symbols op, ")"]
+    f (NumF i)
+      = T.pack $ show i
 
 -- ============================ READING IN EXPRESSIONS ========================
 instance Read Expr where
