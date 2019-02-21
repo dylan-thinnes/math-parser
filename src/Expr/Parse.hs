@@ -14,7 +14,7 @@ import Text.ParserCombinators.ReadPrec (lift)
 
 -- Pretty Printer
 import Data.Functor.Foldable (cata)
-import qualified Data.Text as T
+import qualified Data.Text as T (concat, unpack, pack, Text)
 
 -- ============================ ERROR HANDLING ================================
 prettyPrint :: Expr -> String
