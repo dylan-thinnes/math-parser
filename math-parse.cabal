@@ -2,13 +2,17 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f00dc889bbc72afb8ec715db7fbfe8ad426d7982c587971734946557fba7f711
+-- hash: 5b2081fe73f8c647b8fb5ee947ad70b516e449b43d440c4ace7a6f2bee89806e
 
 name:           math-parse
 version:        0.2.0.0
 synopsis:       Parses & calculate integral mathematical expressions.
-description:    Please see the README on GitHub at <https://github.com/dylan-thinnes/math-parse#readme>
-category:       math
+description:    math-parse parses integral mathematical expressions into ASTs and provides
+                machinery to reduce ASTs into a final calculation with safeguards against
+                large calculations.
+                .
+                Please see the README on GitHub at <https://github.com/dylan-thinnes/math-parse#readme>
+category:       Math
 homepage:       https://github.com/dylan-thinnes/math-parse#readme
 bug-reports:    https://github.com/dylan-thinnes/math-parse/issues
 author:         Dylan Thinnes
