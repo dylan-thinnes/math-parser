@@ -3,6 +3,10 @@ module Expr.Parse where
 
 import Expr.Core
 
+-- Error handling utilities
+import Data.List (intersperse)
+import Data.Char (isSpace)
+
 -- Equation parsing mechanisms
 import Text.ParserCombinators.ReadP
 import qualified Control.Monad.Combinators.Expr as CExpr
@@ -27,6 +31,19 @@ instance Show ParseError where
         ++ (concat $ intersperse "\n" $ map prettyPrint $ exprs)
     show (NoParses)            = "No parses could be found."
     show (ParseEnd rem)        = "Parse ended unexpectedly at: " ++ rem
+
+parseToExpr :: String -> Either ParseError Expr
+parseToExpr str = case validParses of
+                 [] -> case invalidParses of
+                         [] -> Left NoParses
+                         ps -> Left $ ParseEnd $ snd $ last ps
+                 [parse] -> Right $ fst parse
+                 parses'     -> Left $ TooManyParses $ map fst parses'
+    where
+    parses = (reads :: ReadS Expr) str
+    validParses   = filter remainderBlank parses
+    invalidParses = filter (not . remainderBlank) parses
+    remainderBlank = all isSpace . snd
 
 prettyPrint :: Expr -> String
 prettyPrint = T.unpack . cata f
