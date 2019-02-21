@@ -5,6 +5,12 @@ license:             MIT
 author:              "Dylan Thinnes"
 maintainer:          "dylan.thinnes@protonmail.com"
 copyright:           "2019 Dylan Thinnes"
+synopsis:            "Parses & calculate integral mathematical expressions."
+description:         |
+  math-parse parses integral mathematical expressions into ASTs and provides
+  machinery to reduce ASTs into a final calculation with safeguards against
+  large calculations.
+category:            "math"
 
 extra-source-files:
 - README.md

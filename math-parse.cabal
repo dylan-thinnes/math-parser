@@ -2,11 +2,13 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9e869ecc2abe356aa7c9d6f2d534d420e92bb35b32066ac509550e2d5b38a9f1
+-- hash: 64d40ecceea8cca10aba8aff4bb644c868b6da4cb20e564fab527de92803ea0f
 
 name:           math-parse
 version:        0.2.0.0
+synopsis:       Parses mathematical expressions & calculates them.
 description:    Please see the README on GitHub at <https://github.com/dylan-thinnes/math-parse#readme>
+category:       math
 homepage:       https://github.com/dylan-thinnes/math-parse#readme
 bug-reports:    https://github.com/dylan-thinnes/math-parse/issues
 author:         Dylan Thinnes
