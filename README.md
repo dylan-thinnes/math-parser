@@ -33,6 +33,37 @@ Left (C ZeroDivision)
 Left (P NoParses)
 ```
 
+For more information about internals, read on!
+
+## Expr.Parse
+Parse turns input strings into ASTs of type `Expr`, e.g.  
+`1` into `Num 1`  
+`1 * 3` into `BinaryExpr Multiply (Num 1) (Num 3)`  
+
+This can be done using the standard `Read` instance of `Expr`, or using
+`parseToExpr`, which returns `Either` a `ParseError` or an `Expr`. `ParseError`
+accounts for ambiguous parses, incomplete parses, and no parses, returning some
+information on what kind of failure occurred, e.g.  
+```hs
+> read "1 * 3" :: Expr
+BinaryExpr Multiply (Num 1) (Num 3)
+
+> read "" :: Expr
+*** Exception: Prelude.read: no parse
+
+> parseToExpr "1 * 3"
+Right (BinaryExpr Multiply (Num 1) (Num 3))
+
+> parseToExpr "1 * 3 *"
+Left (ParseEnd " *")
+
+> parseToExpr ""
+Left NoParses
+```
+
+All parsing respects operator precedence and applies suffix (postfix) operators
+first, then prefix, then finally binary operators.
+
 ## Supported Operators
 Currently, MathParse supports the following operators, in the following
 precedence (highest to lowest):
