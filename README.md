@@ -7,6 +7,11 @@ operators, considering right/left associativity and operator precedence.
 Currently, it only deals with integral mathematics.
 
 # Usage
+This package exports two root modules - Expr and MathParse. Please use Expr.
+MathParse simply re-exports Expr and is around for legacy compatibility, please
+do not use it.
+
+## Supported Operators
 Currently, MathParse supports the following operators, in the following
 precedence (highest to lowest):
 
