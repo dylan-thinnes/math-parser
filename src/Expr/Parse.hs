@@ -2,11 +2,17 @@
 module Expr.Parse where
 
 import Expr.Core
+
+-- Equation parsing mechanisms
 import Text.ParserCombinators.ReadP
-import Text.Read (readPrec)
-import Text.ParserCombinators.ReadPrec (lift)
 import qualified Control.Monad.Combinators.Expr as CExpr
 import Control.Applicative ((<|>))
+
+-- Defining Read instance using ReadP
+import Text.Read (readPrec)
+import Text.ParserCombinators.ReadPrec (lift)
+
+-- Pretty Printer
 import Data.Functor.Foldable (cata)
 import qualified Data.Text as T
 
