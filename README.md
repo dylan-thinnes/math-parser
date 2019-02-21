@@ -64,6 +64,42 @@ Left NoParses
 All parsing respects operator precedence and applies suffix (postfix) operators
 first, then prefix, then finally binary operators.
 
+## Expr.Reduce
+Reduce turns ASTs of type `Expr` into results of type `Integer`, e.g.  
+`BinaryExpr Add (Num 2) (Num 3)` into `5`  
+`BinaryExpr Divide (Num 7) (Num 2)` into `3`
+
+The main reduction function `reduceWithConstraints` does this by taking a list
+of constraints of type `Constraint` (explained later), then returning a *layer*
+function which can reduce one layer of the tree, `Either` returning a
+`ReduceError` or an `Integer`.
+These *layer* functions thus have type:
+`ExprF (Either ReduceError Integer) -> Either ReduceError Integer`. e.g.  
+```hs
+-- Don't pass in any constraints
+> reduceWithConstraints [] 
+it :: ExprF (Either ReduceError Integer) -> Either ReduceError Integer
+```
+
+By passing the layer function to `runReduce`, the layer function will
+recursively be run over an entire AST.
+`runReduce`.
+```hs
+> layerFunc = reduceWithConstraints []
+> runReduce layerFunc (Num 2)
+Right 2
+
+> runReduce layerFunc (BinaryExpr Add (Num 2) (Num 3))
+Right 5
+
+> runReduce layerFunc (BinaryExpr Divide (Num 2) (Num 0))
+*** Exception: divide by zero
+```
+
+**NOTE**: The `reduce` function is not suitable for `runReduce`. You can only
+use its friends, `reduceWithConstraints` and `reduceSafe`, to produce layer
+functions.
+
 ## Supported Operators
 Currently, MathParse supports the following operators, in the following
 precedence (highest to lowest):
