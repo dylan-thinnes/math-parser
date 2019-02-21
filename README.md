@@ -33,9 +33,10 @@ Removing these limits are trivial - please tell me if you would like them
 removed.
 
 # Algorithmic Underpinnings
-Refer to https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm for the explanation
-I referenced.
+Uses parser combinators from the parser-combinators library to understand
+expressions and turn them into a syntax tree. The previous implementation,
+which used the shunting yard algorithm, proved unwieldy for postfix/prefix
+operators.
 
-The explanation does not go into how right-associative operators, unary
-negation, and parentheses would be parsed, so I figured them out. Please ask in
-an issue if you would like me to write about them.
+~Refer to https://www.engr.mun.ca/~theo/Misc/exp_parsing.htm for the explanation
+I referenced.~
