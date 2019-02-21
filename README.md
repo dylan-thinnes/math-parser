@@ -1,4 +1,4 @@
-# math-parser - The MathParse Haskell module
+# math-parse - Expression-Calculating Haskell module
 
 A simple module parsing & calculating results of integral mathematical
 expressions. It is capable of understanding arbitary binary and unary operators
