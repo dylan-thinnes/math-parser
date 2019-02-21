@@ -17,6 +17,17 @@ import Data.Functor.Foldable (cata)
 import qualified Data.Text as T (concat, unpack, pack, Text)
 
 -- ============================ ERROR HANDLING ================================
+data ParseError = TooManyParses [Expr]
+                | NoParses
+                | ParseEnd String
+    deriving (Eq)
+
+instance Show ParseError where
+    show (TooManyParses exprs) = "There were several parses: \n"
+        ++ (concat $ intersperse "\n" $ map prettyPrint $ exprs)
+    show (NoParses)            = "No parses could be found."
+    show (ParseEnd rem)        = "Parse ended unexpectedly at: " ++ rem
+
 prettyPrint :: Expr -> String
 prettyPrint = T.unpack . cata f
     where
