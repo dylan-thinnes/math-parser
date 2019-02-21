@@ -100,6 +100,41 @@ Right 5
 use its friends, `reduceWithConstraints` and `reduceSafe`, to produce layer
 functions.
 
+### Safer Reductions
+In the last example, the layer function didn't protect against nasty issues like
+division by zero. The `reduceSafe` function automatically provides two
+constraints to protect against division by zero and negative exponents.
+```hs
+> runReduce (reduceSafe []) (BinaryExpr Add (Num 2) (Num 3))
+Right 5
+
+> runReduce (reduceSafe []) (BinaryExpr Divide (Num 2) (Num 0))
+Left ZeroDivision
+
+> runReduce (reduceSafe []) (BinaryExpr Exponentiate (Num 2) (Num -1))
+Left NegativePower
+```
+
+### Constraints and How to Use Them
+You can define limits for different operator behaviours using the 
+`Constraint a` data type. Each constraint contains a pair of predicates and an
+operator for which to apply the predicates, and a `ReduceError` to yield if both
+predicates pass. E.g.  
+```hs
+> let myConstraint = Constraint (BinaryExprF Add (>2) (>2)) TooLarge
+> runReduce (reduceWithConstraints [myConstraint]) (read "3 + 2")
+Right 5
+
+> runReduce (reduceWithConstraints [myConstraint]) (read "3 + 3")
+Left TooLarge
+```
+
+There are three `ReduceErrors`: `TooLarge`, `NegativePower`, `ZeroDivision`
+
+You can pass custom `Constraints` in to `reduceWithConstraints` or
+`reduceSafe`, or even to `calculateSafe` and `calculateWithConstraints` inside
+the root Expr module.
+
 ## Supported Operators
 Currently, MathParse supports the following operators, in the following
 precedence (highest to lowest):
