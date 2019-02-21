@@ -128,7 +128,9 @@ Right 5
 Left TooLarge
 ```
 
-There are three `ReduceErrors`: `TooLarge`, `NegativePower`, `ZeroDivision`
+There are three builtin `ReduceErrors`: `TooLarge`, `NegativePower`,
+`ZeroDivision`. You can also use `Custom "my error here"` to define your own
+ReduceError.
 
 You can pass custom `Constraints` in to `reduceWithConstraints` or
 `reduceSafe`, or even to `calculateSafe` and `calculateWithConstraints` inside
