@@ -11,6 +11,28 @@ This package exports two root modules - Expr and MathParse. Please use Expr.
 MathParse simply re-exports Expr and is around for legacy compatibility, please
 do not use it.
 
+Expr exports two pieces of machinery: Expr.Parse and Expr.Reduce. The former
+parses ASTs from strings, and the latter turns those ASTs into a final integer.
+
+Expr also exports `calculate` functions, which serve to glue together parsing
+and reduction machinery.
+
+`calculate` will take a string expression and Either throw an Error or
+calculate an integer from it, e.g.
+```hs
+> calculate "1 * 3"
+Right 3
+
+> calculate "4 / 3"
+Right 1
+
+> calculate "1 / 0"
+Left (C ZeroDivision)
+
+> calculate ""
+Left (P NoParses)
+```
+
 ## Supported Operators
 Currently, MathParse supports the following operators, in the following
 precedence (highest to lowest):
