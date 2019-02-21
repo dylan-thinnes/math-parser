@@ -135,7 +135,7 @@ You can pass custom `Constraints` in to `reduceWithConstraints` or
 the root Expr module.
 
 ## Supported Operators
-Currently, MathParse supports the following operators, in the following
+Currently, math-parse supports the following operators, in the following
 precedence (highest to lowest):
 
 | Text     | Un/Bin | Assoc  | Usage                                            |
