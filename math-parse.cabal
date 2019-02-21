@@ -2,10 +2,10 @@
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a30dcc81319f7d535effc20e60836cdf67ebf38a20c4b395fd4eac2a106498ed
+-- hash: 9e869ecc2abe356aa7c9d6f2d534d420e92bb35b32066ac509550e2d5b38a9f1
 
 name:           math-parse
-version:        0.1.0.0
+version:        0.2.0.0
 description:    Please see the README on GitHub at <https://github.com/dylan-thinnes/math-parse#readme>
 homepage:       https://github.com/dylan-thinnes/math-parse#readme
 bug-reports:    https://github.com/dylan-thinnes/math-parse/issues
@@ -30,6 +30,7 @@ library
       Expr.Core
       Expr.Parse
       Expr.Reduce
+      MathParse
   other-modules:
       Paths_math_parse
   hs-source-dirs:
