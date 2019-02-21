@@ -15,6 +15,7 @@ import Data.Maybe (mapMaybe, listToMaybe)
 data ReduceError = TooLarge
                  | NegativePower
                  | ZeroDivision
+                 | Custom String
     deriving (Eq)
 
 type Reduction = Either ReduceError Integer
@@ -23,6 +24,7 @@ instance Show ReduceError where
     show TooLarge = "The expression entered was too large to be parsed."
     show NegativePower = "A number was raised to a negative power, which can't be computed because MathParse only works on Integral numbers."
     show ZeroDivision = "A number was divided by zero, which can't be computed as division by zero is undefined."
+    show (Custom str) = str
 
 data Constraint a = Constraint
     { conds :: ExprF (a -> Bool)
