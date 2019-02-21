@@ -27,14 +27,6 @@ Implementing more operators is trivial, so please feel free to ask in an issue
 if you would like any new operator specified, or feel free to write it yourself
 and submit a pull request!
 
-# Limits
-Attempting to take exponents of numbers that are too large will result in a
-TooLarge error being thrown. This is because MathExpr was originally designed
-to be part of a front-facing API.
-
-Removing these limits are trivial - please tell me if you would like them
-removed.
-
 # Algorithmic Underpinnings
 Uses parser combinators from the parser-combinators library to understand
 expressions and turn them into a syntax tree. The previous implementation,
