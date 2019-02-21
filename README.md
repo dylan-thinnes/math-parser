@@ -1,10 +1,8 @@
 # math-parser - The MathParse Haskell module
 
-A simple module based on the shunting yard algorithm for parsing mathematical
-expressions. It is capable of understanding arbitary binary and unary
-operators, considering right/left associativity and operator precedence.
-
-Currently, it only deals with integral mathematics.
+A simple module parsing & calculating results of integral mathematical
+expressions. It is capable of understanding arbitary binary and unary operators
+and considering right/left associativity and operator precedence.
 
 # Usage
 This package exports two root modules - Expr and MathParse. Please use Expr.
