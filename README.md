@@ -5,24 +5,27 @@ expressions. It is capable of understanding arbitary binary operators,
 considering right/left associativity and operator precedence.
 
 # Usage
-Currently, MathParse supports the following binary operators, in the following
+Currently, MathParse supports the following operators, in the following
 precedence (highest to lowest):
 
-| Text | Assoc | Usage                                            |
-|------|-------|--------------------------------------------------|
-|  **  | Right | Take first operand to the power of the second    |
-|  *   | Left  | Multiply first operand by second                 |
-|  /   | Left  | Divide first operand by second                   |
-|  +   | Left  | Add first operand to second                      |
-|  -   | Left  | Subtract second operand from first               |
-|  &   | Left  | Bitwise and of both operands                     |
-|  ^   | Left  | Bitwise xor of both operands                     |
-| \|   | Left  | Bitwise or of both operands                      |
-|  =   | Left  | Outputs 1 if the operands are equal, 0 otherwise |
+| Text     | Un/Bin | Assoc  | Usage                                            |
+|--------- |--------|--------|--------------------------------------------------|
+|  !       | Unary  | Suffix | Factorial of operand                             |
+|  ! , not | Unary  | Prefix | Bitwise complement of operand                    |
+|  -       | Unary  | Prefix | Negate the given operand                         |
+|  ** , ^  | Binary | Right  | Take first operand to the power of the second    |
+|  *       | Binary | Left   | Multiply first operand by second                 |
+|  /       | Binary | Left   | Divide first operand by second                   |
+|  +       | Binary | Left   | Add first operand to second                      |
+|  -       | Binary | Left   | Subtract second operand from first               |
+|  &       | Binary | Left   | Bitwise and of both operands                     |
+|  xor     | Binary | Left   | Bitwise xor of both operands                     |
+| \|       | Binary | Left   | Bitwise or of both operands                      |
+|  =       | Binary | Left   | Outputs 1 if the operands are equal, 0 otherwise |
 
-Implementing more binary operators is trivial, so please feel free to ask in an
-issue if you would like any new operator specified, or feel free to write it
-yourself and submit a pull request!
+Implementing more operators is trivial, so please feel free to ask in an issue
+if you would like any new operator specified, or feel free to write it yourself
+and submit a pull request!
 
 # Limits
 Attempting to take exponents of numbers that are too large will result in a
