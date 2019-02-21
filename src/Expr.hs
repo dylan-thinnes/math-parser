@@ -1,4 +1,8 @@
-module Expr where
+module Expr
+    ( module Expr.Core
+    , module Expr.Reduce
+    , module Expr.Parse
+    ) where
 
 import Expr.Core
 import Expr.Reduce
