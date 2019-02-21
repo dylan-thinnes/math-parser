@@ -14,7 +14,7 @@ import Expr.Parse
 import Control.Arrow (left)
 
 -- Tagged union of Reduce and Parse errors
-data Error = C ReduceError
+data Error = R ReduceError
            | P ParseError
     deriving (Eq)
 
@@ -28,14 +28,14 @@ calculate = calculateSafe []
 calculateSafe :: [Constraint Integer] -> String -> Either Error Integer
 calculateSafe constraints s = do
     e <- left P (parseToExpr s)
-    left C $ runReduce (reduceSafe constraints) e
+    left R $ runReduce (reduceSafe constraints) e
 
 calculateWithConstraints :: [Constraint Integer] -> String -> Either Error Integer
 calculateWithConstraints constraints s = do
     e <- left P (parseToExpr s)
-    left C $ runReduce (reduceWithConstraints constraints) e
+    left R $ runReduce (reduceWithConstraints constraints) e
 
 -- Prints unified ReduceError and ParseError
 instance Show Error where
-    show (C x) = show x
+    show (R x) = show x
     show (P x) = show x
