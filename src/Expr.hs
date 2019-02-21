@@ -4,6 +4,7 @@ import Expr.Core
 import Expr.Reduce
 import Expr.Parse
 
+-- Error handling utility
 import Control.Arrow (left)
 
 -- Tagged union of Reduce and Parse errors
