@@ -83,7 +83,6 @@ it :: ExprF (Either ReduceError Integer) -> Either ReduceError Integer
 
 By passing the layer function to `runReduce`, the layer function will
 recursively be run over an entire AST.
-`runReduce`.
 ```hs
 > layerFunc = reduceWithConstraints []
 > runReduce layerFunc (Num 2)
@@ -96,7 +95,7 @@ Right 5
 *** Exception: divide by zero
 ```
 
-**NOTE**: The `reduce` function is not suitable for `runReduce`. You can only
+**Note**: The `reduce` function cannot be passed to `runReduce`. You can only
 use its friends, `reduceWithConstraints` and `reduceSafe`, to produce layer
 functions.
 
